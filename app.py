@@ -20,22 +20,22 @@ if not os.environ.get("DB_HOST"):
     load_dotenv("req.env")
 
 # =========================
-# FLASK APP
+# FLASK APP & ERROR HANDLING
 # =========================
 
+class DatabaseConnectionError(Exception):
+    pass
+
 app = Flask(__name__)
-# Flask App Initialization (Rebuild Trigger)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "smart_community_secret_key_9876")
 
-import traceback
+@app.errorhandler(DatabaseConnectionError)
+def handle_database_connection_error(e):
+    return render_template("db_error.html", error_message=str(e)), 503
 
 @app.errorhandler(500)
 def handle_500(e):
-    return f"<h1>Internal Server Error (500)</h1><pre>{traceback.format_exc()}</pre>", 500
-
-@app.errorhandler(Exception)
-def handle_exception(e):
-    return f"<h1>Unhandled Exception</h1><pre>{traceback.format_exc()}</pre>", 500
+    return "<h1>Internal Server Error (500)</h1><p>An unexpected error occurred. Please contact the administrator.</p>", 500
 
 # =========================
 # SUPABASE CONNECTION
@@ -47,21 +47,30 @@ def get_db():
         db_name = os.environ.get("DB_NAME", "postgres")
         db_user = os.environ.get("DB_USER", "postgres")
         db_password = os.environ.get("DB_PASSWORD", "REVANTH@206")
-        db_port = int(os.environ.get("DB_PORT", "5432"))
+        
+        # Safely parse DB_PORT to avoid value errors
+        db_port_str = os.environ.get("DB_PORT", "5432")
+        try:
+            db_port = int(db_port_str)
+        except ValueError:
+            db_port = 5432
         
         # Enforce SSL context for secure connection in serverless environment
         ssl_context = ssl.create_default_context()
         ssl_context.check_hostname = False
         ssl_context.verify_mode = ssl.CERT_NONE
         
-        g.db = pg8000.dbapi.connect(
-            host=db_host,
-            database=db_name,
-            user=db_user,
-            password=db_password,
-            port=db_port,
-            ssl_context=ssl_context
-        )
+        try:
+            g.db = pg8000.dbapi.connect(
+                host=db_host,
+                database=db_name,
+                user=db_user,
+                password=db_password,
+                port=db_port,
+                ssl_context=ssl_context
+            )
+        except Exception as e:
+            raise DatabaseConnectionError(f"Failed to connect to database host '{db_host}' on port {db_port}. Details: {str(e)}")
     return g.db
 
 @app.teardown_appcontext
