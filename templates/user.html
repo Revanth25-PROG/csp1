@@ -1,46 +1,115 @@
-<form action="/user" method="POST">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Complaints</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f3f4f8;
+            padding: 20px;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            margin-top: 0;
+            color: #2b2d42;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #2563eb;
+        }
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .complaint-box {
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 10px;
+            background-color: #f8fafc;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+        .complaint-box h3 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+        .complaint-box p {
+            margin: 8px 0;
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        @media (max-width: 480px) {
+            form {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search Your Complaints</h2>
+        <form action="/user" method="POST">
+            <input type="text" name="name" placeholder="Enter Name" required>
+            <button type="submit">Search</button>
+        </form>
 
-    <input type="text"
-    name="name"
-    placeholder="Enter Name">
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 25px 0;">
 
-    <button type="submit">
-        Search
-    </button>
-
-</form>
-
-<hr>
-
-{% if complaints %}
-
-    {% for complaint in complaints %}
-
-    <div style="
-    border:1px solid black;
-    padding:10px;
-    margin:10px;
-    border-radius:5px;
-    background-color:#fafafa;">
-
-        <h3>Name : {{ complaint[1] }}</h3>
-
-        <p>Phone : {{ complaint[2] }}</p>
-
-        <p>Type : {{ complaint[3] }}</p>
-
-        <p>Location : {{ complaint[4] }}</p>
-
-        <p>Description : {{ complaint[5] }}</p>
-
-        <p>Status : {{ complaint[6] }}</p>
-
-        {% if complaint[8] %}
-            <p><b>Resolved By :</b> {{ complaint[8] }}</p>
+        {% if complaints %}
+            {% for complaint in complaints %}
+            <div class="complaint-box">
+                <h3>Name : {{ complaint[1] }}</h3>
+                <p><b>Phone :</b> {{ complaint[2] }}</p>
+                <p><b>Type :</b> {{ complaint[3] }}</p>
+                <p><b>Location :</b> {{ complaint[4] }}</p>
+                <p><b>Description :</b> {{ complaint[5] }}</p>
+                <p><b>Status :</b> {{ complaint[6] }}</p>
+                {% if complaint[8] %}
+                    <p><b>Resolved By :</b> {{ complaint[8] }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% elif complaints is not none %}
+            <p style="text-align: center; color: #64748b;">No complaints found for that name.</p>
         {% endif %}
-
     </div>
-
-    {% endfor %}
-
-{% endif %}
+</body>
+</html>

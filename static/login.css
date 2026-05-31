@@ -83,3 +83,13 @@ body{
 
     background: #1d4ed8;
 }
+
+@media (max-width: 400px) {
+    body {
+        padding: 20px;
+    }
+    .login-box {
+        width: 100%;
+        padding: 20px;
+    }
+}

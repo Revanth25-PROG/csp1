@@ -84,3 +84,50 @@ body{
 .btn:hover{
     background-color:darkgreen;
 }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .sidebar h2 {
+        margin-bottom: 0;
+        font-size: 20px;
+    }
+    .sidebar a {
+        display: inline-block;
+        margin-top: 0;
+        margin-left: 10px;
+        padding: 8px 15px;
+    }
+    .main {
+        padding: 15px;
+    }
+    .main h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .cards {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .card {
+        width: 100%;
+        padding: 20px;
+    }
+    .card p {
+        font-size: 28px;
+    }
+    .box {
+        padding: 15px;
+        margin-top: 15px;
+    }
+}

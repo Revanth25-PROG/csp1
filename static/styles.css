@@ -249,3 +249,46 @@ h1 {
     color: rgba(225,225,225,0.3);
     
 }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        padding: 40px 20px;
+        justify-content: flex-start;
+    }
+    .menu {
+        position: static;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 40px;
+        gap: 15px;
+    }
+    .menu a {
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+    h1 {
+        position: static;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 40px;
+        margin-top: 40px;
+        line-height: 1.4;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    .report {
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+    }
+    .report div {
+        width: 150px;
+        height: 150px;
+        font-size: 18px;
+    }
+}
