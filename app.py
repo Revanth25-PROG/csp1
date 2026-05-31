@@ -43,9 +43,9 @@ def handle_500(e):
 
 def get_db():
     if 'db' not in g:
-        db_host = os.environ.get("DB_HOST", "db.dwunumnikuafvlgcgrnw.supabase.co")
+        db_host = os.environ.get("DB_HOST", "aws-1-ap-south-1.pooler.supabase.com")
         db_name = os.environ.get("DB_NAME", "postgres")
-        db_user = os.environ.get("DB_USER", "postgres")
+        db_user = os.environ.get("DB_USER", "postgres.dwunumnikuafvlgcgrnw")
         db_password = os.environ.get("DB_PASSWORD", "REVANTH@206")
         
         # Safely parse DB_PORT to avoid value errors
