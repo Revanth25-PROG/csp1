@@ -284,19 +284,7 @@ body {
   position: relative;
 }
 
-.phone-mockup::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 25px;
-  background: var(--secondary-color);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  z-index: 10;
-}
+/* Dynamic island removed by user request */
 
 .phone-header {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
