@@ -4,25 +4,13 @@ body,
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
- 
 }
-body {
-  background-image:
-    linear-gradient(
-      rgba(255, 255, 255, 0.7),
-      rgba(255, 255, 255, 0.7)
-    ),
-    url("./assets/background.png");
 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
+/* Background image is strictly handled by App.css for specific pages like .home-content and .auth-page to prevent double-background conflicts */
