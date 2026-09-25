@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Search, Clock, AlertCircle, LayoutList, MapPin, Tag, Calendar, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { withPhotoLinks } from '../complaintPhotos';
 
 function Track() {
   const [complaints, setComplaints] = useState([]);
@@ -21,7 +22,7 @@ function Track() {
           .order('created_at', { ascending: false });
 
         if (!error && data) {
-          setComplaints(data);
+          setComplaints(await withPhotoLinks(data));
         }
       }
       setLoading(false);

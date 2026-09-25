@@ -16,14 +16,20 @@ function Register() {
     e.preventDefault();
     setIsSubmitting(true);
     
+    let uploadedPath = null;
     try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) throw new Error('Please log in before registering a complaint.');
+      if (photo && (!['image/jpeg', 'image/png', 'image/webp'].includes(photo.type) || photo.size > 5242880)) {
+        throw new Error('Choose a JPEG, PNG, or WebP image no larger than 5 MB.');
+      }
       let photo_url = null;
 
       // 1. Upload photo to Supabase Storage if it exists
       if (photo) {
         const fileExt = photo.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `${user.id}/${fileName}`;
         
         const { error: uploadError } = await supabase.storage
           .from('complaint-photos')
@@ -33,16 +39,9 @@ function Register() {
           throw uploadError;
         }
 
-        // Get public URL
-        const { data: publicUrlData } = supabase.storage
-          .from('complaint-photos')
-          .getPublicUrl(filePath);
-          
-        photo_url = publicUrlData.publicUrl;
+        uploadedPath = filePath;
+        photo_url = filePath;
       }
-
-      // 2. Fetch current user if logged in
-      const { data: { user } } = await supabase.auth.getUser();
 
       // 3. Insert record into database
       const { error: insertError } = await supabase
@@ -54,7 +53,7 @@ function Register() {
             description: formData.description,
             photo_url: photo_url,
             status: 'pending',
-            user_id: user ? user.id : null // Link to user if logged in
+            user_id: user.id
           }
         ]);
 
@@ -67,6 +66,7 @@ function Register() {
       setPhoto(null);
       
     } catch (error) {
+      if (uploadedPath) await supabase.storage.from('complaint-photos').remove([uploadedPath]);
       console.error('Error submitting complaint:', error);
       alert(`Failed to register complaint: ${error.message}`);
     } finally {
@@ -156,7 +156,7 @@ function Register() {
               <ImageIcon size={18} className="input-icon" />
               <input 
                 type="file" 
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 onChange={(e) => setPhoto(e.target.files[0])}
                 style={{ paddingLeft: '42px', paddingTop: '10px' }}
               />

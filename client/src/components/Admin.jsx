@@ -24,7 +24,7 @@ function Admin() {
         setError(error.message);
       } else {
         // Check if the user is actually an admin
-        if (data.user?.user_metadata?.role === 'admin') {
+        if (data.user?.app_metadata?.role === 'admin') {
           navigate('/dashboard');
         } else {
           // If a normal user tries to log in here, kick them out

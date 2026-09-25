@@ -36,7 +36,7 @@ function User() {
       if (error) {
         setError(error.message);
       } else {
-        if (data.user?.user_metadata?.role === 'admin') {
+        if (data.user?.app_metadata?.role === 'admin') {
           navigate('/dashboard'); // If admin logs in from user page
         } else {
           setCurrentUser(data.user); // Update state to show profile

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LayoutDashboard, MapPin, Tag, Calendar, LogOut, CheckCircle } from 'lucide-react';
 import { supabase } from '../supabaseClient';
+import { withPhotoLinks } from '../complaintPhotos';
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function AdminDashboard() {
     const checkUserAndFetch = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       
-      if (!user) {
+      if (!user || user.app_metadata?.role !== 'admin') {
         navigate('/admin-login');
         return;
       }
@@ -27,7 +28,7 @@ function AdminDashboard() {
       if (error) {
         setError('Failed to fetch complaints from Supabase');
       } else {
-        setComplaints(data);
+        setComplaints(await withPhotoLinks(data));
       }
       setLoading(false);
     };
